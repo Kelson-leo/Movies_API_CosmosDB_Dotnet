@@ -1,0 +1,19 @@
+meta {
+  name: Add Movie
+  type: http
+  seq: 2
+}
+
+post {
+  url: http://localhost:5223/Movie
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "title": "Amélie",
+    "genre": "Romantic Comedy",
+    "duration": "122"
+  }
+}
