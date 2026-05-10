@@ -44,4 +44,31 @@ public class MovieController : ControllerBase
         if (movie == null) return NotFound();
         return Ok(movie);
     }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateMovie(string id, [FromBody] Movie movieAtualizado)
+    {
+        var movie = await _context.Movies.FirstOrDefaultAsync(movie => movie.Id == id);
+        if (movie == null) return NotFound();
+
+        movie.Title = movieAtualizado.Title;
+        movie.Genre = movieAtualizado.Genre;
+        movie.Duration = movieAtualizado.Duration;
+
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteMovie(string id)
+    {
+        var movie = await _context.Movies.FirstOrDefaultAsync(movie => movie.Id == id);
+        if (movie == null) return NotFound();
+
+        _context.Movies.Remove(movie);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }
