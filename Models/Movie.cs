@@ -7,11 +7,11 @@ public class Movie
     public int Id { get; set; }
 
     [Required(ErrorMessage = "The movie title is required")]
-    public string Title { get; set; }
+    public required string Title { get; set; }
 
     [Required(ErrorMessage = "The movie genre is required")]
     [MaxLength(50, ErrorMessage = "The genre length cannot exceed 50 characters")]
-    public string Genre { get; set; }
+    public required string Genre { get; set; }
 
     [Required]
     [Range(70, 600, ErrorMessage = "Duration must be between 70 and 600 minutes")]
