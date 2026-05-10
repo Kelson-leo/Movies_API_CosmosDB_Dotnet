@@ -1,8 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using MoviesAPI.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+var endpoint = builder.Configuration["CosmosDbSettings:Endpoint"]!;
+var key = builder.Configuration["CosmosDbSettings:Key"]!;
+var databaseName = builder.Configuration["CosmosDbSettings:DatabaseName"]!;
 
-builder.Services.AddControllers();
+builder.Services.AddDbContext<MovieContext>(opts =>
+    opts.UseCosmos(endpoint, key, databaseName));
+
+// Add services to the container.
+builder.Services.AddControllers().AddNewtonsoftJson();
+
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
