@@ -14,5 +14,9 @@ public class MovieContext : DbContext
         modelBuilder.Entity<Movie>()
             .ToContainer("Movies")
             .HasPartitionKey(m => m.Id);
+
+        modelBuilder.Entity<Movie>()
+            .Property(m => m.Id)
+            .ToJsonProperty("id");
     }
 }

@@ -1,6 +1,7 @@
 using MoviesAPI.Models;
 using MoviesAPI.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace MoviesAPI.Controllers;
 
@@ -9,7 +10,7 @@ namespace MoviesAPI.Controllers;
 
 public class MovieController : ControllerBase
 {
-    public readonly MovieContext _context;
+    private readonly MovieContext _context;
 
     public MovieController(MovieContext context)
     {
@@ -18,10 +19,10 @@ public class MovieController : ControllerBase
 
     [HttpPost]
 
-    public IActionResult AddMovie([FromBody] Movie movie)
+    public async Task<IActionResult> AddMovie([FromBody] Movie movie)
     {
         _context.Movies.Add(movie);
-        _context.SaveChanges();
+        await _context.SaveChangesAsync();
         return CreatedAtAction(nameof(ReadMovieById),
          new { id = movie.Id },
          movie);
@@ -29,16 +30,17 @@ public class MovieController : ControllerBase
 
     [HttpGet]
 
-    public IEnumerable<Movie> ReadMovie([FromQuery] int skip = 0, [FromQuery] int take = 50)
+    public async Task<IActionResult> ReadMovie([FromQuery] int skip = 0, [FromQuery] int take = 50)
     {
-        return _context.Movies.Skip(skip).Take(take);
+        var movies = await _context.Movies.Skip(skip).Take(take).ToListAsync();
+        return Ok(movies);
     }
 
     [HttpGet("{id}")]
 
-    public IActionResult? ReadMovieById(int id)
+    public async Task<IActionResult> ReadMovieById(string id)
     {
-        var movie = _context.Movies.FirstOrDefault(movie => movie.Id == id);
+        var movie = await _context.Movies.FirstOrDefaultAsync(movie => movie.Id == id);
         if (movie == null) return NotFound();
         return Ok(movie);
     }

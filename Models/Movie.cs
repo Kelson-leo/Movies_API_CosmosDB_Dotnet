@@ -4,7 +4,7 @@ namespace MoviesAPI.Models;
 
 public class Movie
 {
-    public int Id { get; set; }
+    public string Id { get; set; } = Guid.NewGuid().ToString();
 
     [Required(ErrorMessage = "The movie title is required")]
     public required string Title { get; set; }
